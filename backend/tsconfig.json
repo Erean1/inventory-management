@@ -6,7 +6,6 @@
         "rootDir": "./src",
         "skipLibCheck": true,
         "strict": true,
-        "typeRoots": ["./src/types","./node_modules/@types"]
 
     },
     "include": ["src/**/*"],

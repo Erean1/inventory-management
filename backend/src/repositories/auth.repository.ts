@@ -29,19 +29,6 @@ export class AuthRepository {
       throw new CustomError(error.message);
     }
   }
-  public async findById(userId : any) : Promise<User | null>{
-    try{
-      const user = prisma.user.findUnique({
-        where : {
-          id : userId
-        }
-      })
-      return user
-    } catch(error : any){
-      throw new CustomError(error.message);
-
-    }
-  }
   public async createUser(body: RegisterUserDto,verifyOtp : string): Promise<User> {
     let { username, password, email } = body;
     const hashedPw = await hashPassword(password);
