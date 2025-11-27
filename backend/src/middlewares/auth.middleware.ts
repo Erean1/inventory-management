@@ -17,34 +17,35 @@ export const authMiddleware = async (
       const decodedData = jwt.verify(accessToken, ACCESS_SECRET!) as JwtPayload;
       req.user = decodedData;
       next();
+    } else {
+      if (!refreshToken && refreshToken === "")
+        throw new CustomError("RefreshToken missing");
+      const decodeRefresh = jwt.verify(
+        refreshToken,
+        REFRESH_SECRET!
+      ) as JwtPayload;
+
+      const userDatas = await authRepository.findById(Number(decodeRefresh.id));
+
+      const newUserData = {
+        id: userDatas.id,
+        username: userDatas.username,
+        email: userDatas.email,
+        createdAt: userDatas.created_at,
+      };
+
+      const newAccessToken = jwt.sign(newUserData, ACCESS_SECRET!, {
+        expiresIn: "1h",
+      });
+
+      res.cookie("accesToken", newAccessToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60,
+      });
+
+      next();
     }
-    if (!refreshToken && refreshToken === "")
-      throw new CustomError("RefreshToken missing");
-    const decodeRefresh = jwt.verify(
-      refreshToken,
-      REFRESH_SECRET!
-    ) as JwtPayload;
-
-    const userDatas = await authRepository.findById(Number(decodeRefresh.id));
-
-    const newUserData = {
-      id: userDatas.id,
-      username: userDatas.username,
-      email: userDatas.email,
-      createdAt: userDatas.created_at,
-    };
-
-    const newAccessToken = jwt.sign(newUserData, ACCESS_SECRET!, {
-      expiresIn: "1h",
-    });
-
-    res.cookie("accesToken", newAccessToken, {
-      httpOnly: true,
-      sameSite: "strict",
-      maxAge: 1000 * 60 * 60,
-    });
-
-    next();
   } catch (error: any) {
     throw new CustomError(error.message);
   }

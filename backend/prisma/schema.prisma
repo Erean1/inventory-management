@@ -24,7 +24,8 @@ model User {
   reset_otp String @default("")
   reset_otp_expire_at DateTime?
   roles RolesOnUsers[]
-
+  owned_companies Company[]
+  companies CompanyMember[]
   created_at DateTime @default(now())
 }
 
@@ -44,4 +45,29 @@ model RolesOnUsers{
 
   @@id([role_id,user_id])
 
+}
+
+model Company {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  created_at DateTime @default(now())
+  owner User @relation(fields: [owner_id],references: [id])
+  owner_id Int
+  members CompanyMember[]
+}
+model CompanyMember {
+  member User @relation(fields: [member_id],references: [id])
+  member_id Int
+  company Company @relation(fields: [company_id],references: [id])
+  company_id Int
+  joined_at DateTime @default(now())
+  @@id([member_id,company_id])
+  role CompanyRole @default(MEMBER) 
+    
+}
+enum CompanyRole {
+  OWNER
+  ADMIN
+  MEMBER
 }
