@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { ACCESS_SECRET, REFRESH_SECRET } from "../config/env.config";
 import { CustomError } from "../lib/customError";
-import { AuthRepository } from "../repositories/auth.repository";
+import { AuthRepository } from "../modules/auth/auth.repository";
 
 const authRepository = new AuthRepository();
 export const authMiddleware = async (

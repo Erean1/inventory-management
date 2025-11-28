@@ -1,8 +1,8 @@
 import { Request,Response } from "express";
-import { loginSchema, registerSchema, resetPasswordSchema, verifyOtpSchema } from "../validation/auth.validation";
-import { ResponseHandler } from "../lib/response";
-import { AuthService } from "../services/auth.service";
-import { cookieHandler } from "../helpers/auth.helpers";
+import { loginSchema, registerSchema, resetPasswordSchema, verifyOtpSchema } from "./auth.validation";
+import { ResponseHandler } from "../../lib/response";
+import { AuthService } from "./auth.service";
+import { cookieHandler } from "./auth.helpers";
 
 
 export class AuthController {

@@ -1,6 +1,6 @@
-import { ICreateCompany, IUpdateCompany} from "../dto/company.dto";
-import { Company } from "../generated/prisma";
-import { prisma } from "../lib/prisma";
+import { ICreateCompany, IUpdateCompany} from "./dtos/company.dto";
+import { Company } from "../../generated/prisma";
+import { prisma } from "../../lib/prisma";
 export class CompanyRepository{
 
     public async createCompany(body : ICreateCompany,userId : number) : Promise<Company | null> {
@@ -31,7 +31,8 @@ export class CompanyRepository{
             return companies
     } 
     public async findById(companyId : number) : Promise<Company | null>{
-        const company = await prisma.company.findFirst({
+        
+        const company = await prisma.company.findUnique({
             where : {
                 id : companyId
             }

@@ -1,9 +1,9 @@
 import bcrpyt from "bcryptjs";
-import { transporter } from "../config/transporter";
+import { transporter } from "../../config/transporter";
 import jwt from "jsonwebtoken"
-import { ACCESS_SECRET, REFRESH_SECRET } from "../config/env.config";
+import { ACCESS_SECRET, REFRESH_SECRET } from "../../config/env.config";
 import { Response } from "express";
-import { User } from "../generated/prisma";
+import { User } from "../../generated/prisma";
 export const hashPassword = (password: string): Promise<string> => {
   const hashedPassword = bcrpyt.hash(password, 10);
   return hashedPassword;

@@ -1,7 +1,7 @@
 import { Request, response, Response } from "express";
-import { ResponseHandler } from "../lib/response";
-import { createCompanySchema, updateCompanySchema } from "../validation/company.validation";
-import { CompanyService } from "../services/company.service";
+import { ResponseHandler } from "../../lib/response";
+import { createCompanySchema, updateCompanySchema } from "./company.validation";
+import { CompanyService } from "./company.service";
 
 export class CompanyController {
     private responseHandler : ResponseHandler

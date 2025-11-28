@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
-import { ICreateCompany, IUpdateCompany } from "../dto/company.dto";
-import { CustomError } from "../lib/customError";
-import { CompanyRepository } from "../repositories/company.repository";
-import { Company } from "../generated/prisma";
+import { ICreateCompany, IUpdateCompany } from "./dtos/company.dto";
+import { CustomError } from "../../lib/customError";
+import { CompanyRepository } from "./company.repository";
+import { Company } from "../../generated/prisma";
 
 export class CompanyService {
   private companyRepository: CompanyRepository;

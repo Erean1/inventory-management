@@ -26,6 +26,7 @@ model User {
   roles RolesOnUsers[]
   owned_companies Company[]
   companies CompanyMember[]
+  warehouses WarehouseManager[]
   created_at DateTime @default(now())
 }
 
@@ -55,6 +56,7 @@ model Company {
   owner User @relation(fields: [owner_id],references: [id])
   owner_id Int
   members CompanyMember[]
+  warehouse Warehouse[]
 }
 model CompanyMember {
   member User @relation(fields: [member_id],references: [id])
@@ -68,6 +70,29 @@ model CompanyMember {
 }
 enum CompanyRole {
   OWNER
+  ADMIN
+  MEMBER
+}
+model Warehouse{
+  id Int @id @default(autoincrement())
+  name String
+  address String
+  company Company @relation(fields: [company_id],references: [id])
+  company_id Int
+  created_at DateTime @default(now())
+  capacity Int @default(50)
+  managers WarehouseManager[]
+}
+model WarehouseManager{
+  user User @relation(fields: [user_id],references: [id])
+  user_id Int
+  warehouse Warehouse @relation(fields: [warehouse_id],references: [id])
+  warehouse_id Int
+  joined_at DateTime @default(now())
+  role WarehouseRole @default(MEMBER)
+  @@id([user_id,warehouse_id])
+}
+enum WarehouseRole {
   ADMIN
   MEMBER
 }

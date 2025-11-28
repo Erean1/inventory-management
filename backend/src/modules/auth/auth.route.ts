@@ -1,9 +1,9 @@
 import express, { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
-import { AuthService } from "../services/auth.service";
-import { AuthRepository } from "../repositories/auth.repository";
-import { ResponseHandler } from "../lib/response";
-import limiter from "../middlewares/rateLimit";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
+import { AuthRepository } from "./auth.repository";
+import { ResponseHandler } from "../../lib/response";
+import limiter from "../../middlewares/rateLimit";
 
 const authRouter: Router = express.Router();
 

@@ -3,16 +3,16 @@ import {
   RegisterUserDto,
   resetPasswordDto,
   verifyUserDto,
-} from "../dto/auth.dto";
+} from "./dtos/auth.dto";
 import {
   expireDateHandlerBasedMinutes,
   generateOtp,
   hashComparer,
   hashPassword,
   mailSender,
-} from "../helpers/auth.helpers";
-import { CustomError } from "../lib/customError";
-import { AuthRepository } from "../repositories/auth.repository";
+} from "./auth.helpers";
+import { CustomError } from "../../lib/customError";
+import { AuthRepository } from "./auth.repository";
 export class AuthService {
   private authRepository: AuthRepository;
 
