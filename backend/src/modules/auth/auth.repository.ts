@@ -1,11 +1,11 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../core/lib/prisma";
 import { User } from "@prisma/client";
 import { RegisterUserDto, resetPasswordDto } from "./dtos/auth.dto";
 import {
   expireDateHandlerBasedMinutes,
   hashPassword,
 } from "./auth.helpers";
-import { CustomError } from "../../lib/customError";
+import { CustomError } from "../../core/lib/customError";
 export class AuthRepository {
   public async findByEmail(email: string): Promise<User | null> {
     try {

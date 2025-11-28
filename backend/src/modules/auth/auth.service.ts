@@ -11,7 +11,7 @@ import {
   hashPassword,
   mailSender,
 } from "./auth.helpers";
-import { CustomError } from "../../lib/customError";
+import { CustomError } from "../../core/lib/customError";
 import { AuthRepository } from "./auth.repository";
 export class AuthService {
   private authRepository: AuthRepository;

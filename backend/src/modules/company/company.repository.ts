@@ -1,16 +1,22 @@
 import { ICreateCompany, IUpdateCompany} from "./dtos/company.dto";
-import { Company } from "../../generated/prisma";
-import { prisma } from "../../lib/prisma";
+import { Company, CompanyRole } from "../../generated/prisma";
+import { prisma } from "../../core/lib/prisma";
 export class CompanyRepository{
 
     public async createCompany(body : ICreateCompany,userId : number) : Promise<Company | null> {
+            const role = "OWNER" as CompanyRole;
             const company = await prisma.company.create({
                 data : {
                     name : body.name,
                     description : body.description,
-                    owner_id : userId
+                    owner_id : userId,
+                    members : {
+                        create : {
+                            member_id : userId,
+                            role : CompanyRole.OWNER
+                    }
                 }
-            })
+            }})
             return company
 
     }
@@ -31,7 +37,6 @@ export class CompanyRepository{
             return companies
     } 
     public async findById(companyId : number) : Promise<Company | null>{
-        
         const company = await prisma.company.findUnique({
             where : {
                 id : companyId

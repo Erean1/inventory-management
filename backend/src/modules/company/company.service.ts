@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { ICreateCompany, IUpdateCompany } from "./dtos/company.dto";
-import { CustomError } from "../../lib/customError";
+import { CustomError } from "../../core/lib/customError";
 import { CompanyRepository } from "./company.repository";
 import { Company } from "../../generated/prisma";
 
@@ -14,7 +14,6 @@ export class CompanyService {
       if (isExists) throw new CustomError("Company name must be unique")
       const newCompany = await this.companyRepository.createCompany(body,user.id);
       return newCompany
- 
   };
   public getOwnCompaniesService = async (userId : number) => {
         const companies = await this.companyRepository.getOwnCompanies(userId)

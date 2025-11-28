@@ -1,5 +1,5 @@
 import { Warehouse, WarehouseManager, WarehouseRole } from "../../generated/prisma"
-import { prisma } from "../../lib/prisma"
+import { prisma } from "../../core/lib/prisma"
 import { ICreateWarehouse, IUpdateWarehouse } from "./dtos/warehouse.dto"
 
 export class WarehouseRepository {

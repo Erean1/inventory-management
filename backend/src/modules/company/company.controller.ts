@@ -1,5 +1,5 @@
 import { Request, response, Response } from "express";
-import { ResponseHandler } from "../../lib/response";
+import { ResponseHandler } from "../../core/lib/response";
 import { createCompanySchema, updateCompanySchema } from "./company.validation";
 import { CompanyService } from "./company.service";
 

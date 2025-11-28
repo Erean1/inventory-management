@@ -1,5 +1,5 @@
 import { Request, response, Response } from "express"
-import { ResponseHandler } from "../../lib/response"
+import { ResponseHandler } from "../../core/lib/response"
 import { WarehouseService } from "./warehouse.service"
 import { createWarehouseSchema, updateWarehouseSchema } from "./warehouse.validation"
 

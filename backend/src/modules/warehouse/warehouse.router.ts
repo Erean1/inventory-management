@@ -1,5 +1,5 @@
 import express from "express";
-import { ResponseHandler } from "../../lib/response";
+import { ResponseHandler } from "../../core/lib/response";
 import { WarehouseRepository } from "./warehouse.repository";
 import { WarehouseService } from "./warehouse.service";
 import { WarehouseController } from "./warehouse.controller";

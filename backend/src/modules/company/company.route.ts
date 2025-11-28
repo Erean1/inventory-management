@@ -1,10 +1,11 @@
 import express from "express";
-import { ResponseHandler } from "../../lib/response";
+import { ResponseHandler } from "../../core/lib/response";
 import { CompanyRepository } from "./company.repository";
 import { CompanyService } from "./company.service";
 import { CompanyController } from "./company.controller";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 import warehouseRouter from "../warehouse/warehouse.router";
+import companyMemberRouter from "./members/member.route";
 
 const companyRouter = express.Router();
 
@@ -24,5 +25,8 @@ companyRouter.put("/:id",authMiddleware,companyController.updateOwnCompany)
 
 // warehouses
 companyRouter.use("/:companyId/warehouses",warehouseRouter)
+
+// companyMembers
+companyRouter.use("/:companyId/members",companyMemberRouter)
 
 export default companyRouter;
