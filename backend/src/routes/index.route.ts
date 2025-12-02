@@ -7,6 +7,6 @@ const router : Router = express.Router();
 
 router.use("/auth",authRouter);
 router.use("/companies",companyRouter)
-router.use("/warehouse",warehouseRouter)
+router.use("/warehouses",warehouseRouter)
 // Rol yönetim sistemi ekle
 export default router

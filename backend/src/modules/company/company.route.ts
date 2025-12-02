@@ -6,6 +6,7 @@ import { CompanyController } from "./company.controller";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 import warehouseRouter from "../warehouse/warehouse.router";
 import companyMemberRouter from "./members/member.route";
+import productRouter from "../product/product.route";
 
 const companyRouter = express.Router();
 
@@ -28,5 +29,9 @@ companyRouter.use("/:companyId/warehouses",warehouseRouter)
 
 // companyMembers
 companyRouter.use("/:companyId/members",companyMemberRouter)
+
+// products
+
+companyRouter.use("/:companyId/products",productRouter)
 
 export default companyRouter;

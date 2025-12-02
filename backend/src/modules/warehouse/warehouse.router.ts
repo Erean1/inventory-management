@@ -6,6 +6,7 @@ import { WarehouseController } from "./warehouse.controller";
 import { CompanyRepository } from "../company/company.repository";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 import limiter from "../../middlewares/rateLimit";
+import warehouseProductRouter from "./product/warehouseProduct.route";
 
 const warehouseRouter = express.Router({mergeParams:true}); // nested routes için gerekli başka router içinde başka bir router kullandığımda params diğerine geçmez geçmesi için bu lazım
 
@@ -33,4 +34,11 @@ warehouseRouter.get("/:warehouseId/managers",limiter,authMiddleware,warehouseCon
 warehouseRouter.post("/:warehouseId/managers/add",limiter,authMiddleware,warehouseController.addManager)
 warehouseRouter.post("/:warehouseId/managers/remove",limiter,authMiddleware,warehouseController.removeManager)
 warehouseRouter.put("/:warehouseId/managers/role",limiter,authMiddleware,warehouseController.giveRole)
+
+// Products
+warehouseRouter.use("/:warehouseId/products",warehouseProductRouter)
+
+
+
+
 export default warehouseRouter
