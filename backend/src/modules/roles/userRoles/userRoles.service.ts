@@ -12,7 +12,7 @@ export class UserRolesService {
     return await this.userRolesRepository.giveRole(
       userId,
       roleId,
-      reqUser.username
+      reqUser.username || reqUser
     );
   };
   removeRoleService = async (

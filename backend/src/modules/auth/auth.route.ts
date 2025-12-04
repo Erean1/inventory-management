@@ -4,12 +4,16 @@ import { AuthService } from "./auth.service";
 import { AuthRepository } from "./auth.repository";
 import { ResponseHandler } from "../../core/lib/response";
 import limiter from "../../middlewares/rateLimit";
+import { UserRolesRepository } from "../roles/userRoles/userRoles.repository";
+import { UserRolesService } from "../roles/userRoles/userRoles.service";
 
 const authRouter: Router = express.Router();
-
+const userRolesRepository = new UserRolesRepository()
 const authRepositoryInstance = new AuthRepository();
+const userRolesService = new UserRolesService(userRolesRepository);
 
-const authServiceInstance = new AuthService(authRepositoryInstance);
+
+const authServiceInstance = new AuthService(authRepositoryInstance,userRolesService);
 const responseHandlerInstance = new ResponseHandler();
 
 const authController = new AuthController(
