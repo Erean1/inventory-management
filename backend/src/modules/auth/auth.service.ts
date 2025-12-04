@@ -13,22 +13,26 @@ import {
 } from "./auth.helpers";
 import { CustomError } from "../../core/lib/customError";
 import { AuthRepository } from "./auth.repository";
+import { RoleService } from "../roles/role.service";
+import { UserRolesService } from "../roles/userRoles/userRoles.service";
 export class AuthService {
   private authRepository: AuthRepository;
-
-  constructor(authRepository: AuthRepository) {
+  private userRolesService : UserRolesService
+  constructor(authRepository: AuthRepository,userRolesService : UserRolesService) {
     this.authRepository = authRepository;
+    this.userRolesService = userRolesService
   }
 
   public async registerUserService(body: RegisterUserDto) {
     try {
       const { email, password, username } = body;
-      const isExists = await this.authRepository.findByEmail(email);
+      const isExists = await this.authRepository.findByEmail(email) || await this.authRepository.findByUsername(username);
       if (isExists) {
         throw new CustomError("existing user");
       }
       let verifyOtp = await generateOtp();
       const user = await this.authRepository.createUser(body, verifyOtp);
+      await this.userRolesService.giveRoleService(user.id,"SYSTEM",1)
       let link = `http://localhost:5000/api/auth/verify?email=${email}&verifyOtp=${verifyOtp}`;
       await mailSender(
         email,
