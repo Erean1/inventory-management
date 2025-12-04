@@ -23,7 +23,7 @@ model User {
   verify_otp_expire_at DateTime?
   reset_otp String @default("")
   reset_otp_expire_at DateTime?
-  roles RolesOnUsers[]
+  roles RolesOnUsers[] 
   owned_companies Company[]
   companies CompanyMember[]
   warehouses WarehouseManager[]
@@ -32,8 +32,24 @@ model User {
 
 model Role {
   id Int @id @default(autoincrement())
-  name String
+  name String @unique
   users RolesOnUsers[]
+  permissions RolePermissions[]
+}
+model Permission {
+  id Int @id
+  name String
+  createdAt DateTime @default(now())
+  roles RolePermissions[]
+}
+
+model RolePermissions {
+  role Role @relation(fields: [role_id],references: [id])
+  role_id Int
+  permission Permission @relation(fields: [permission_id],references: [id])
+  permission_id Int
+  createdAt DateTime @default(now())
+  @@id([role_id,permission_id])
 }
 
 model RolesOnUsers{
@@ -43,9 +59,7 @@ model RolesOnUsers{
   user_id Int
   assigned_at DateTime @default(now())
   assigned_by String
-
   @@id([role_id,user_id])
-
 }
 
 model Company {

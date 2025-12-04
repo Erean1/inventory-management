@@ -3,7 +3,11 @@ import { IUpdateUserDto } from "./dtos/updateUser.dto"
 
 export class UserRepository{
     getUsers = async() => {
-        return await prisma.user.findMany({})
+        return await prisma.user.findMany({
+            include : {
+                roles : true
+            }
+        })
     }
     updateUser = async (userId : number,body : IUpdateUserDto) => {
         return await prisma.user.update({

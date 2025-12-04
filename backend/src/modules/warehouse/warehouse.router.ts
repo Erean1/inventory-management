@@ -7,6 +7,7 @@ import { CompanyRepository } from "../company/company.repository";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 import limiter from "../../middlewares/rateLimit";
 import warehouseProductRouter from "./product/warehouseProduct.route";
+import { roleGuard } from "../../middlewares/roleGuard.middleware";
 
 const warehouseRouter = express.Router({mergeParams:true}); // nested routes için gerekli başka router içinde başka bir router kullandığımda params diğerine geçmez geçmesi için bu lazım
 
@@ -24,11 +25,11 @@ const warehouseController = new WarehouseController(
     warehouseService,
     responseHandler
 )
-warehouseRouter.get("/",limiter,authMiddleware,warehouseController.getWareHouseList)
-warehouseRouter.post("/",limiter,authMiddleware,warehouseController.createWarehouse)
-warehouseRouter.delete("/:warehouseId",limiter,authMiddleware,warehouseController.deleteWarehouse)
-warehouseRouter.put("/:warehouseId",limiter,authMiddleware,warehouseController.updateWarehouse)
-warehouseRouter.get("/:warehouseId",limiter,authMiddleware,warehouseController.getWarehouseDetails)
+warehouseRouter.get("/",limiter,authMiddleware,roleGuard(["admin.warehouse.view","moderator.warehouse.view","user.warehouse.view"]),warehouseController.getWareHouseList)
+warehouseRouter.post("/",limiter,authMiddleware,roleGuard(["admin.warehouse.create","moderator.warehouse.create","user.warehouse.create"]),warehouseController.createWarehouse)
+warehouseRouter.delete("/:warehouseId",limiter,authMiddleware,roleGuard(["admin.warehouse.delete","moderator.warehouse.delete","user.warehouse.delete"]),warehouseController.deleteWarehouse)
+warehouseRouter.put("/:warehouseId",limiter,authMiddleware,roleGuard(["admin.warehouse.update","moderator.warehouse.update","user.warehouse.update"]),warehouseController.updateWarehouse)
+warehouseRouter.get("/:warehouseId",limiter,authMiddleware,roleGuard(["admin.warehouse.view","moderator.warehouse.view","user.warehouse.view"]),warehouseController.getWarehouseDetails)
 // managers
 warehouseRouter.get("/:warehouseId/managers",limiter,authMiddleware,warehouseController.getManagers)
 warehouseRouter.post("/:warehouseId/managers/add",limiter,authMiddleware,warehouseController.addManager)
