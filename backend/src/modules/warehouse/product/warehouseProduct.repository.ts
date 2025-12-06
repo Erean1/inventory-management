@@ -21,6 +21,14 @@ export class WarehouseProductRepository {
             }
         })
     }
+    findProduct = async(wareouseId : number,productId : number) => {
+        return await prisma.warehouseProduct.findFirst({
+            where : {
+                warehouse_id: wareouseId,
+                product_id : productId 
+            }
+        })
+    }
     updateProduct = async(warehouseId : number,productId : number,body : IUpdateWarehouseProduct) => {
         return await prisma.warehouseProduct.update({
             where : {

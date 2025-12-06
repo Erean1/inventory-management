@@ -78,6 +78,9 @@ export class WarehouseRepository {
         return await prisma.warehouse.findUnique({
             where : {
                 id : warehouseId
+            },
+            include : {
+                products : true
             }
         })
     }

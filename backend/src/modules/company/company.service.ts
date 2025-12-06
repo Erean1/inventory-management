@@ -9,6 +9,15 @@ export class CompanyService {
   constructor(companyRepository: CompanyRepository) {
     this.companyRepository = companyRepository;
   }
+  isCompanyExists = async(companyId : number) : Promise<void>=> {
+    const company = await this.companyRepository.findById(companyId);
+    if (!company) throw new CustomError("Company not found",404);
+  }
+  isOwner = async(userId : number,companyId : number) : Promise<void>=> {
+    const company = await this.companyRepository.findById(companyId);
+    if (!company) throw new CustomError("Company not found",404);
+    if (company.owner_id !== userId) throw new CustomError("Only company owner can this operation")
+  }
   public createCompanyService = async (body: ICreateCompany,user : User): Promise<Company | null> => {
       const isExists = await this.companyRepository.findByName(body.name)
       if (isExists) throw new CustomError("Company name must be unique")

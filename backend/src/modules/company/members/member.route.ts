@@ -6,16 +6,18 @@ import { ResponseHandler } from "../../../core/lib/response";
 import { CompanyRepository } from "../company.repository";
 import limiter from "../../../middlewares/rateLimit";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
+import { CompanyService } from "../company.service";
 
-    const companyMemberRouter = express.Router({mergeParams:true});
+const companyMemberRouter = express.Router({mergeParams:true});
 const companyRepository = new CompanyRepository()
+const companyService = new CompanyService(companyRepository)
 
 const companyMemberRepository = new CompanyMemberRepository()
 const responseHandler = new ResponseHandler()
 
 const companyMemberService = new CompanyMemberService(
     companyMemberRepository,
-    companyRepository
+    companyService
 )
 
 const companyMemberController = new CompanyMemberController(

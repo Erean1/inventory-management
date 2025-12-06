@@ -5,14 +5,29 @@ import { WarehouseProductService } from "./warehouseProduct.service";
 import { WarehouseProductController } from "./warehouseProduct.controller";
 import limiter from "../../../middlewares/rateLimit";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
+import { WarehouseService } from "../warehouse.service";
+import { WarehouseRepository } from "../warehouse.repository";
+import { CompanyRepository } from "../../company/company.repository";
+import { ProductService } from "../../product/product.service";
+import { ProductRepository } from "../../product/product.repository";
+import { CompanyService } from "../../company/company.service";
 
 
 const warehouseProductRouter = express.Router({mergeParams:true});
 
+const warehouseRepository = new WarehouseRepository()
+const companyRepository = new CompanyRepository()
+const companyService = new CompanyService(companyRepository)
+const warehouseService = new WarehouseService(warehouseRepository,companyService)
+const productRepository = new ProductRepository()
+const productService = new ProductService(productRepository)
+
 const responseHandler = new ResponseHandler()
 const warehouseProductRepository = new WarehouseProductRepository()
 const warehouseProductService = new WarehouseProductService(
-    warehouseProductRepository
+    warehouseProductRepository,
+    warehouseService,
+    productService
 )
 
 const warehouseProductController = new WarehouseProductController(

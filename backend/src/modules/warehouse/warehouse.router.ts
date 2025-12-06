@@ -8,6 +8,7 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 import limiter from "../../middlewares/rateLimit";
 import warehouseProductRouter from "./product/warehouseProduct.route";
 import { roleGuard } from "../../middlewares/roleGuard.middleware";
+import { CompanyService } from "../company/company.service";
 
 const warehouseRouter = express.Router({mergeParams:true}); // nested routes için gerekli başka router içinde başka bir router kullandığımda params diğerine geçmez geçmesi için bu lazım
 
@@ -16,9 +17,11 @@ const warehouseRepository = new WarehouseRepository();
 
 const companyRepository = new CompanyRepository()
 
+const companyService = new CompanyService(companyRepository)
+
 const warehouseService = new WarehouseService(
     warehouseRepository,
-    companyRepository
+    companyService
 );
 
 const warehouseController = new WarehouseController(
