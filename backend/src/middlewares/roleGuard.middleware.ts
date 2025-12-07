@@ -20,7 +20,7 @@ export const roleGuard = (requiredPermissions : string[]) => {
       const userRoles = roles.map((role) => role.Role); / map içinde await yapılmaz! /  
       let userPermissions = []
       for (let role of userRoles) {
-        const permissions = await roleService.getRolePermissions(role.id);
+        const permissions = await roleService.getRolePermissions(role.id,user.id);
         userPermissions.push(...permissions) // eğer ...permissions yapmazsak her gelen diğerinin üzerine yazar 
       }
       const requiredPermission = requiredPermissions.map((requiredPermission) => requiredPermission.split(".")[1]+ "." + requiredPermission.split(".")[2] )

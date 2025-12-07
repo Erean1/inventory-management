@@ -20,7 +20,7 @@ export class WarehouseController{
         const user = req.user
         const {companyId} = req.params
         try {
-            const createdWarehouse = await this.warehouseService.createWarehouse(user.id,body,Number(companyId))
+            const createdWarehouse = await this.warehouseService.createWarehouse(user.id,body,Number(companyId),req.user)
             
             this.responseHandler.successResponse(res,"Warehouse created Successfully!",201,createdWarehouse)
         } catch(error : any){
@@ -31,7 +31,7 @@ export class WarehouseController{
         const companyId = req.params.companyId
         const user = req.user
         try {
-            const warehouses = await this.warehouseService.getWareHouseList(user.id,Number(companyId))
+            const warehouses = await this.warehouseService.getWareHouseList(user.id,Number(companyId),req.ip)
 
             this.responseHandler.successResponse(res,"List here",200,warehouses)
         } catch(error : any){
@@ -42,7 +42,7 @@ export class WarehouseController{
         const {companyId,warehouseId} = req.params
         const user = req.user
         try {
-            await this.warehouseService.deleteWarehouse(user.id,Number(companyId),Number(warehouseId));
+            await this.warehouseService.deleteWarehouse(user.id,Number(companyId),Number(warehouseId),req.ip);
             this.responseHandler.successResponse(res,"Warehouse deleted successfully!",204)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -53,8 +53,9 @@ export class WarehouseController{
         const body = updateWarehouseSchema.parse({
             ...req.body
         });
+        const user = req.user
         try {
-            await this.warehouseService.updateWarehouse(body,Number(warehouseId),Number(companyId))
+            await this.warehouseService.updateWarehouse(body,Number(warehouseId),Number(companyId),user.id,req.ip)
             this.responseHandler.successResponse(res,"Warehouse updated succesfully",200)
             
         } catch(error : any){
@@ -66,7 +67,7 @@ export class WarehouseController{
         const {managerId,role} = req.body
         const user = req.user
         try {
-            await this.warehouseService.addManager(Number(companyId),Number(warehouseId),user.id,Number(managerId))
+            await this.warehouseService.addManager(Number(companyId),Number(warehouseId),user.id,Number(managerId),req.ip)
             this.responseHandler.successResponse(res,"Manager added successfully!",200)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -77,7 +78,7 @@ export class WarehouseController{
         const user = req.user;
         const managerId = req.body.managerId;
         try {
-            await this.warehouseService.removeManager(Number(companyId),Number(warehouseId),user.id,Number(managerId))
+            await this.warehouseService.removeManager(Number(companyId),Number(warehouseId),user.id,Number(managerId),req.ip)
             this.responseHandler.successResponse(res,"Manager removed sucessfully!",200)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -87,7 +88,7 @@ export class WarehouseController{
         const {companyId,warehouseId} = req.params
         const user = req.user;
         try {
-            const warehouse = await this.warehouseService.getWarehouseDetails(Number(companyId),Number(warehouseId),user.id)
+            const warehouse = await this.warehouseService.getWarehouseDetails(Number(companyId),Number(warehouseId),user.id,req.ip)
             this.responseHandler.successResponse(res,"Get Warehouse Details successfully!",200,warehouse)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -97,7 +98,7 @@ export class WarehouseController{
         const {warehouseId,companyId} = req.params
         const user = req.user
         try {
-            const managers = await this.warehouseService.getManagers(Number(companyId),Number(warehouseId),user.id)
+            const managers = await this.warehouseService.getManagers(Number(companyId),Number(warehouseId),user.id,req.ip)
             this.responseHandler.successResponse(res,"Get Managers successfully!",200,managers)
         } catch(error:any){
             this.responseHandler.errorResponse(res,error.message)
@@ -108,7 +109,7 @@ export class WarehouseController{
         const user = req.user
         const {role,managerId} = req.body
         try {
-           await this.warehouseService.giveRole(Number(companyId),Number(warehouseId),user.id,role,Number(managerId))
+           await this.warehouseService.giveRole(Number(companyId),Number(warehouseId),user.id,role,Number(managerId),req.ip)
            this.responseHandler.successResponse(res,"Role operation success!",200)
         } catch(error : any){
            this.responseHandler.errorResponse(res,error.message)

@@ -28,6 +28,7 @@ model User {
   companies CompanyMember[]
   warehouses WarehouseManager[]
   created_at DateTime @default(now())
+  auditLogs AuditLog[]
 }
 
 model Role {
@@ -131,4 +132,17 @@ model WarehouseProduct {
   warehouse_id Int
   added_at DateTime @default(now())
   @@id([product_id,warehouse_id])
+}
+
+model AuditLog {
+  id Int @id @default(autoincrement())
+  action String
+  actor User @relation(fields: [actor_id],references: [id])
+  actor_id Int
+  ip_address String?
+  created_at DateTime @default(now())
+  old_data Json?
+  new_data Json?
+  entity String
+  entity_id Int
 }

@@ -16,7 +16,7 @@ export class UserRolesController {
         const {roleId,userId} = req.body
         const user = req.user
         try {
-            await this.userRolesService.giveRoleService(userId,user,Number(roleId))
+            await this.userRolesService.giveRoleService(userId,user,Number(roleId),req?.ip!)
             this.responseHandler.successResponse(res,"Give role to user successfully!",200)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -27,7 +27,7 @@ export class UserRolesController {
         const {roleId,userId} = req.body
         const user = req.user
         try {
-            await this.userRolesService.removeRoleService(userId,user.id,roleId)
+            await this.userRolesService.removeRoleService(userId,user.id,roleId,req.ip)
             this.responseHandler.successResponse(res,"Removed Role from user successfully!",200)
         }catch(error : any){
             this.responseHandler.errorResponse(res,error.message)

@@ -13,8 +13,9 @@ import {
 } from "./auth.helpers";
 import { CustomError } from "../../core/lib/customError";
 import { AuthRepository } from "./auth.repository";
-import { RoleService } from "../roles/role.service";
 import { UserRolesService } from "../roles/userRoles/userRoles.service";
+import { auditLogService } from "../auditLogs";
+import { auditLogHelper } from "../auditLogs/auditLogHelper";
 export class AuthService {
   private authRepository: AuthRepository;
   private userRolesService : UserRolesService
@@ -23,7 +24,7 @@ export class AuthService {
     this.userRolesService = userRolesService
   }
 
-  public async registerUserService(body: RegisterUserDto) {
+  public async registerUserService(body: RegisterUserDto,ip? : any) {
     try {
       const { email, password, username } = body;
       const isExists = await this.authRepository.findByEmail(email) || await this.authRepository.findByUsername(username);
@@ -40,13 +41,14 @@ export class AuthService {
         `Your Otp CODE is ${verifyOtp} click To link and verify your account ${link}`
       );
       user.verify_otp = verifyOtp;
+      auditLogHelper("Register",user.id,ip,"User",user.id)
       return user;
     } catch (error: any) {
       throw new CustomError(error.message);
     }
   }
 
-  public loginUserService = async (body: any) => {
+  public loginUserService = async (body: any,ip? : any) => {
     const { email, username, password } = body;
     try {
       let user;
@@ -59,13 +61,15 @@ export class AuthService {
       if (!isMatch) throw new CustomError("Wrong password");
       if (user && user.is_verified === false)
         throw new CustomError("User not verified,verify your account first!");
+      auditLogHelper("Login",user.id,ip,"User",user.id)
+
       return user;
     } catch (error: any) {
       throw new CustomError(error.message);
     }
   };
 
-  public verifyUserService = async (body: verifyUserDto) => {
+  public verifyUserService = async (body: verifyUserDto,ip? : any) => {
     const { verifyOtp, email } = body;
     try {
       const user = await this.authRepository.findByEmail(email);
@@ -78,6 +82,7 @@ export class AuthService {
         user.verify_otp_expire_at?.getTime() < new Date().getTime();
       if (!isOtpMatch) throw new CustomError("Verify otp doesn't match", 400);
       if (isOtpExpired) throw new CustomError("Verify Otp expired");
+      auditLogHelper("Verify",user.id,ip,"User",user.id)
 
       user.verify_otp = "";
       user.verify_otp_expire_at = null;
@@ -87,7 +92,7 @@ export class AuthService {
     }
   };
 
-  public sendResetOtpService = async (email: string): Promise<void> => {
+  public sendResetOtpService = async (email: string,ip? : any): Promise<void> => {
     try {
       const user = await this.authRepository.findByEmail(email);
 
@@ -108,6 +113,8 @@ export class AuthService {
         "Reset Otp",
         `Your reset otp is ${resetOtp}  click the link for reset ${link}`
       );
+      auditLogHelper("Reset otp",user.id,ip,"User",user.id)
+
     } catch (error: any) {
       throw new CustomError(error.message);
     }
@@ -115,7 +122,8 @@ export class AuthService {
 
   public resetPasswordService = async (
     body: resetPasswordDto,
-    email: any
+    email: any,
+    ip? : any
   ): Promise<void> => {
     const { resetOtp, newPassword, confirmNewPassword } = body;
     if (newPassword !== confirmNewPassword)
@@ -132,12 +140,14 @@ export class AuthService {
         user.reset_otp_expire_at.getTime() < new Date().getTime();
       if (isResetOtpExpired) throw new CustomError("Reset Otp expired");
       const hashedPw = await hashPassword(newPassword);
+      auditLogHelper("Password Reset",user.id,ip,"User",user.id)
+
       await this.authRepository.resetPassword(email, user.password, hashedPw);
     } catch (error: any) {
       throw new CustomError(error.message);
     }
   };
-  public logoutService = (res : Response) => {
+  public logoutService = async(res : Response,userId :number,ip? : any) => {
     res.clearCookie("accessToken",{
       httpOnly : true,
       sameSite : "strict",
@@ -148,5 +158,7 @@ export class AuthService {
       sameSite : "strict",
       maxAge : 0
     })
+    auditLogHelper("Register",userId,ip,"User",userId)
+
   }
 }

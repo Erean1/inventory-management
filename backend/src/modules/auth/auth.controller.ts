@@ -17,8 +17,8 @@ export class AuthController {
             ...req.body
         });
         try {
-            
-            await this.authService.registerUserService(body)
+
+            await this.authService.registerUserService(body,req.ip)
             return this.responseHandler.successResponse(res,"Registeration Successfully!",200);
         }catch(error : any){
             return this.responseHandler.errorResponse(res,error.message)
@@ -29,7 +29,7 @@ export class AuthController {
             ...req.body
         });
         try {
-            const user = await this.authService.loginUserService(body);
+            const user = await this.authService.loginUserService(body,req.ip);
             cookieHandler(res,user)
             
             return this.responseHandler.successResponse(res,"Login successfully!",200,user)
@@ -43,7 +43,7 @@ export class AuthController {
             ...req.query
         })
         try {
-            await this.authService.verifyUserService(body)
+            await this.authService.verifyUserService(body,req.ip)
 
             return this.responseHandler.successResponse(res,"Account Verified Successfully!",200)
         } catch(error : any){
@@ -54,7 +54,7 @@ export class AuthController {
     public sendResetOtp = async(req:Request,res:Response) : Promise<void> => {
         const email = req.body.email
         try {
-            await this.authService.sendResetOtpService(email);
+            await this.authService.sendResetOtpService(email,req.ip);
             this.responseHandler.successResponse(res,"Reset Otp send successfully!",200)
             
         } catch(error : any){
@@ -67,15 +67,16 @@ export class AuthController {
         })
         const email = req.query.email
         try {
-            await this.authService.resetPasswordService(body,email)
+            await this.authService.resetPasswordService(body,email,req.ip)
             this.responseHandler.successResponse(res,"Password Reset Success!",200)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
         }
     }
     public logoutUser = async(req:Request,res:Response) => {
+        const user = req.user
         try {
-            await this.authService.logoutService(res)
+            await this.authService.logoutService(res,user.id,req.ip)
             this.responseHandler.successResponse(res,"Logout success!")
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)

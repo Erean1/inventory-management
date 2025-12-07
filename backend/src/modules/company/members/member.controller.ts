@@ -13,7 +13,7 @@ export class CompanyMemberController {
         const companyId = req.params.companyId
         const user = req.user
         try {
-            const companyMembers = await this.companyMemberService.memberList(Number(companyId),user.id)
+            const companyMembers = await this.companyMemberService.memberList(Number(companyId),user.id,req.ip)
             this.responseHandler.successResponse(res,"Get CompanyMembers successfully!",200,companyMembers)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -24,7 +24,7 @@ export class CompanyMemberController {
         const {memberId,role} = req.body;
         const user = req.user
         try {
-            await this.companyMemberService.addMember(Number(companyId),user.id,Number(memberId),role);
+            await this.companyMemberService.addMember(Number(companyId),user.id,Number(memberId),role,req.ip);
             this.responseHandler.successResponse(res,"Member added to company successfully!",200)
         } catch(error: any){
             this.responseHandler.errorResponse(res,error.message)
@@ -35,7 +35,7 @@ export class CompanyMemberController {
         const {memberId,role} = req.body;
         const user = req.user
         try {
-            await this.companyMemberService.removeMember(Number(companyId),user.id,Number(memberId),role);
+            await this.companyMemberService.removeMember(Number(companyId),user.id,Number(memberId),role,req.ip);
             this.responseHandler.successResponse(res,"Member removed from company successfully!",200)
         } catch(error: any){
             this.responseHandler.errorResponse(res,error.message)
@@ -46,7 +46,7 @@ export class CompanyMemberController {
         const {memberId,role} = req.body;
         const user = req.user
         try {
-            await this.companyMemberService.memberRole(Number(companyId),user.id,Number(memberId),role);
+            await this.companyMemberService.memberRole(Number(companyId),user.id,Number(memberId),role,req.ip);
             this.responseHandler.successResponse(res,"Give role to member successfully!",200)
         } catch(error: any){
             this.responseHandler.errorResponse(res,error.message)

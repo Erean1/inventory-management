@@ -13,7 +13,7 @@ export class UserController {
     getUsers = async(req:Request,res:Response) =>  {
         try {
             const user = req.user
-            const users  = await this.userService.getUsersService(user.id)
+            const users  = await this.userService.getUsersService(user.id,req.ip)
             this.responseHandler.successResponse(res,"Get Users Successfully!",200,users)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -26,7 +26,7 @@ export class UserController {
         const userId = req.params.userId
         const user = req.user
         try {
-            await this.userService.updateUserService(user.id,Number(userId),body)
+            await this.userService.updateUserService(user.id,Number(userId),body,req.ip)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
         }
@@ -35,7 +35,7 @@ export class UserController {
         const userId = req.params.userId
         const user = req.user
         try {
-            return await this.userService.deleteUserService(Number(userId),user.id)
+            return await this.userService.deleteUserService(Number(userId),user.id,req.ip)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
         }

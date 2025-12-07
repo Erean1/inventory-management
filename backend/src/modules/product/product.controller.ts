@@ -14,7 +14,7 @@ export class ProductController {
         const companyId = req.params.companyId;
         const user = req.user
         try {
-            const products = await this.productService.getProductsService(Number(companyId),user.id);
+            const products = await this.productService.getProductsService(Number(companyId),user.id,req.ip);
             this.responseHandler.successResponse(res,"Get Products successfully!",200,products)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -27,7 +27,7 @@ export class ProductController {
             ...req.body
         })
         try {
-            await this.productService.addProductService(Number(companyId),user.id,body)
+            await this.productService.addProductService(Number(companyId),user.id,body,req.ip)
             this.responseHandler.successResponse(res,"Product added successfully!",201)
 
         } catch(error : any){
@@ -38,7 +38,7 @@ export class ProductController {
         const user = req.user;
         const {companyId,productId} = req.params
         try {
-            await this.productService.deleteProductService(Number(companyId),user.id,Number(productId))
+            await this.productService.deleteProductService(Number(companyId),user.id,Number(productId),req.ip)
             this.responseHandler.successResponse(res,"Product deleted successfull!",204)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)

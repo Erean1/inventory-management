@@ -6,6 +6,7 @@ import { ResponseHandler } from "../../core/lib/response";
 import limiter from "../../middlewares/rateLimit";
 import { UserRolesRepository } from "../roles/userRoles/userRoles.repository";
 import { UserRolesService } from "../roles/userRoles/userRoles.service";
+import { authMiddleware } from "../../middlewares/auth.middleware";
 
 const authRouter: Router = express.Router();
 const userRolesRepository = new UserRolesRepository()
@@ -26,5 +27,5 @@ authRouter.post("/login", limiter,authController.loginUser);
 authRouter.get("/verify", limiter,authController.verifyUser);
 authRouter.post("/send-reset-otp",limiter,authController.sendResetOtp)
 authRouter.post("/reset-password",limiter,authController.passwordReset)
-authRouter.post("/logout",limiter,authController.logoutUser)
+authRouter.post("/logout",limiter,authMiddleware,authController.logoutUser)
 export default authRouter;

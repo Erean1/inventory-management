@@ -16,7 +16,7 @@ export class CompanyController {
         })
         const user = req.user
         try {
-            const newCompany = await this.companyService.createCompanyService(body,user)
+            const newCompany = await this.companyService.createCompanyService(body,user,req.ip)
             this.responseHandler.successResponse(res,"Company Created",201,newCompany)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -25,7 +25,7 @@ export class CompanyController {
     public getOwnCompanies = async(req:Request,res:Response) => {
         const user = req.user
         try {
-            const myCompanies = await this.companyService.getOwnCompaniesService(user.id) 
+            const myCompanies = await this.companyService.getOwnCompaniesService(user.id,req.ip) 
             this.responseHandler.successResponse(res,"Get Own Companies Success!",200,myCompanies)
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -35,7 +35,7 @@ export class CompanyController {
         const user = req.user;
         const companyId = req.params.id
         try {
-            const deletedCompany = await this.companyService.deleteCompanyService(user.id,Number(companyId));
+            const deletedCompany = await this.companyService.deleteCompanyService(user.id,Number(companyId),req.ip);
             this.responseHandler.successResponse(res,"Company Deleted Success!",204)  
         } catch(error : any){
             this.responseHandler.errorResponse(res,error.message)
@@ -48,7 +48,7 @@ export class CompanyController {
             ...req.body
         })
         try{
-            const updatedCompany = await this.companyService.updateCompanyService(user.id,Number(companyId),body)
+            const updatedCompany = await this.companyService.updateCompanyService(user.id,Number(companyId),body,req.ip)
             this.responseHandler.successResponse(res,"Company Updated Successfully!",200,updatedCompany)
         } catch(error:any){
             this.responseHandler.errorResponse(res,error.message)
